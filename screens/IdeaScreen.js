@@ -99,7 +99,7 @@ export default function IdeaScreen() {
                   style={styles.deleteButton}
                   onPress={() => deleteIdea(item.id)}
                 >
-                  <Text style={styles.deleteText}>Delete</Text>
+                  <Text style={styles.deleteText}>Delete Idea</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -112,7 +112,6 @@ export default function IdeaScreen() {
         onPress={() => navigation.navigate("AddIdea", { personId })}
       />
 
-      {/* Modal to preview image */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -183,13 +182,14 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   deleteButton: {
-    backgroundColor: "red",
+    backgroundColor: "#f44336",
     padding: 10,
     borderRadius: 5,
   },
   deleteText: {
     color: "white",
     fontWeight: "bold",
+    alignSelf: "center",
   },
   modalContainer: {
     flex: 1,

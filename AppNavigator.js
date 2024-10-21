@@ -1,4 +1,5 @@
 import React from "react";
+import { Button } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import PeopleScreen from "./screens/PeopleScreen";
@@ -15,16 +16,25 @@ export default function AppNavigator() {
         <Stack.Screen
           name="People"
           component={PeopleScreen}
-          options={{
+          options={({ navigation }) => ({
             title: "People List",
             headerStyle: {
-              backgroundColor: "dodgerblue",
+              backgroundColor: "#ccc",
             },
-            headerTintColor: "white",
+            // headerTintColor: "white",
             headerTitleStyle: {
               fontWeight: "bold",
             },
-          }}
+            headerRight: () => (
+              <Button
+                title="Add Person"
+                onPress={() => navigation.navigate("AddPerson")}
+              />
+            ),
+            headerRightContainerStyle: {
+              paddingRight: 10,
+            },
+          })}
         />
         <Stack.Screen
           name="AddPerson"

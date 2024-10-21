@@ -7,6 +7,9 @@ import {
   SafeAreaView,
   StyleSheet,
   TouchableOpacity,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
   Image,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -20,7 +23,6 @@ export default function AddIdeaScreen() {
   const personId = route.params?.personId;
 
   const [ideaText, setIdeaText] = useState("");
-  const [ideaImage, setIdeaImage] = useState("");
 
   const [hasPermission, setHasPermission] = useState(null);
   const cameraRef = useRef(null);
@@ -39,7 +41,7 @@ export default function AddIdeaScreen() {
       id: Date.now().toString(),
       text: ideaText,
       // img: ideaImage || "https://via.placeholder.com/50",
-      img: photo ,
+      img: photo,
     };
 
     const updatedPeople = people.map((p) =>
@@ -88,68 +90,66 @@ export default function AddIdeaScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.heading}>Add Idea for {person?.name}</Text>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}
+      >
+          <Text style={styles.heading}>Add Idea for {person?.name}</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Gift idea"
-        value={ideaText}
-        onChangeText={setIdeaText}
-      />
+          <TextInput
+            style={styles.input}
+            placeholder="Gift idea"
+            value={ideaText}
+            onChangeText={setIdeaText}
+          />
 
-      {/* <TextInput
-        style={styles.input}
-        placeholder="Optional: Enter image URL"
-        value={ideaImage}
-        onChangeText={setIdeaImage}
-      /> */}
-
-      <View style={{ flex: 1 }}>
-        {/* Camera view if no photo is taken yet */}
-        {!photo ? (
-          <CameraView
-            style={{ flex: 1 }}
-            facing={facing}
-            ref={cameraRef}
-            // ref={(ref) => setCameraRef(ref)}
-          >
-            <View style={styles.cameraContainer}>
-              <TouchableOpacity
-                style={styles.flipButton}
-                onPress={toggleCameraFacing}
+          <View style={{ flex: 1 }}>
+            {/* Camera view if no photo is taken yet */}
+            {!photo ? (
+              <CameraView
+                style={{ flex: 1 }}
+                facing={facing}
+                ref={cameraRef}
+                // ref={(ref) => setCameraRef(ref)}
               >
-                <Text style={styles.flipText}> Flip </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.captureButton}
-                onPress={() => takePicture()}
-              >
-                <Text style={styles.captureText}> Take Picture </Text>
-              </TouchableOpacity>
-            </View>
-          </CameraView>
-        ) : (
-          // If a photo is taken, display the preview
-          <View style={styles.previewContainer}>
-            <Image source={{ uri: photo }} style={styles.imagePreview} />
-            <TouchableOpacity
-              style={styles.retakeButton}
-              onPress={() => setPhoto(null)}
-            >
-              <Text style={styles.captureText}> Retake </Text>
-            </TouchableOpacity>
+                <View style={styles.cameraContainer}>
+                  <TouchableOpacity
+                    style={styles.flipButton}
+                    onPress={toggleCameraFacing}
+                  >
+                    <Text style={styles.flipText}> Flip </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.captureButton}
+                    onPress={() => takePicture()}
+                  >
+                    <Text style={styles.captureText}> Take Picture </Text>
+                  </TouchableOpacity>
+                </View>
+              </CameraView>
+            ) : (
+              // If a photo is taken, display the preview
+              <View style={styles.previewContainer}>
+                <Image source={{ uri: photo }} style={styles.imagePreview} />
+                <TouchableOpacity
+                  style={styles.retakeButton}
+                  onPress={() => setPhoto(null)}
+                >
+                  <Text style={styles.captureText}> Retake </Text>
+                </TouchableOpacity>
+              </View>
+            )}
           </View>
-        )}
-      </View>
 
-      <View style={styles.buttonContainer}>
-        <Button title="Save" onPress={handleAddIdea} />
-        <Button
-          title="Cancel"
-          onPress={() => navigation.goBack()}
-          color="red"
-        />
-      </View>
+          <View style={styles.buttonContainer}>
+            <Button title="Save" onPress={handleAddIdea} />
+            <Button
+              title="Cancel"
+              onPress={() => navigation.goBack()}
+              color="red"
+            />
+          </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }

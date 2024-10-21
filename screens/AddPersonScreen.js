@@ -8,6 +8,8 @@ import {
   StyleSheet,
   Text,
   Platform,
+  KeyboardAvoidingView,
+  ScrollView,
 } from "react-native";
 import PeopleContext from "../PeopleContext";
 import { useNavigation } from "@react-navigation/native";
@@ -22,22 +24,11 @@ export default function AddPersonScreen() {
 
   const [mode, setMode] = useState("date");
   const [showPicker, setShowPicker] = useState(false);
-  // const [text, setText] = useState("Show Date Picker");
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || dob;
     setShowPicker(Platform.OS === "ios");
     setDob(currentDate);
-
-    let tempDate = new Date(currentDate);
-    let fDate =
-      tempDate.getDate() +
-      "/" +
-      (tempDate.getMonth() + 1) +
-      "/" +
-      tempDate.getFullYear();
-    // setText(fDate);
-    console.log(fDate);
   };
 
   const showMode = (currentMode) => {
@@ -54,57 +45,69 @@ export default function AddPersonScreen() {
       Alert.alert("Name and DOB are required.");
     }
   };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>Add a Person</Text>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <ScrollView contentContainerStyle={styles.container}>
+        <Text style={styles.heading}>Add a Person</Text>
 
-      <Text>Person Name</Text>
-      <TextInput
-        placeholder="Name"
-        value={name}
-        onChangeText={setName}
-        style={styles.input}
-      />
+        <Text>Person Name</Text>
+        <KeyboardAvoidingView behavior="padding">
+          <TextInput
+            placeholder="Name"
+            value={name}
+            onChangeText={setName}
+            style={styles.input}
+          />
+        </KeyboardAvoidingView>
 
-      <Text>Date of Birth</Text>
-      <TouchableOpacity onPress={() => setShowPicker(true)}>
-        <TextInput
-          placeholder="2003-01-03"
-          value={format(dob, "yyyy-MM-dd")}
-          onPress={() => showMode("date")}
-          // onChangeText={setDob}
-          style={styles.input}
-        />
-      </TouchableOpacity>
+        <Text>Date of Birth</Text>
+        <KeyboardAvoidingView behavior="padding">
+          <TouchableOpacity onPress={() => setShowPicker(true)}>
+            <TextInput
+              placeholder="2003-01-03"
+              value={format(dob, "yyyy-MM-dd")}
+              onPress={() => showMode("date")}
+              style={styles.input}
+            />
+          </TouchableOpacity>
+        </KeyboardAvoidingView>
 
-      {showPicker && (
-        <DateTimePicker
-          testId="dateTimePicker"
-          value={dob}
-          mode={mode}
-          is24Hour={true}
-          display="default"
-          onChange={onChange}
-        />
-      )}
+        {showPicker && (
+          <DateTimePicker
+            testId="dateTimePicker"
+            value={dob}
+            mode={mode}
+            is24Hour={true}
+            display="default"
+            onChange={onChange}
+          />
+        )}
 
-      <TouchableOpacity style={styles.saveButton} onPress={savePerson}>
-        <Text style={styles.buttonText}>Save</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[styles.saveButton, styles.cancelButton]}
-        onPress={() => navigation.goBack()}
-      >
-        <Text style={styles.buttonText}>Cancel</Text>
-      </TouchableOpacity>
-    </View>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.saveButton} onPress={savePerson}>
+            <Text style={styles.buttonText}>Save</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.saveButton, styles.cancelButton]}
+            onPress={() => navigation.goBack()}
+          >
+            <Text style={styles.buttonText}>Cancel</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     padding: 20,
+    // justifyContent: "center",
   },
   heading: {
     fontSize: 20,
@@ -118,6 +121,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     paddingLeft: 10,
     borderRadius: 5,
+  },
+  buttonContainer: {
+    paddingBottom: 20,
   },
   saveButton: {
     backgroundColor: "dodgerblue",
@@ -133,7 +139,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "white",
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: "bold",
   },
 });
