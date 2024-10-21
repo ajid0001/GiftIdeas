@@ -98,10 +98,10 @@ export default function PeopleScreen() {
             )}
           />
         )}
-        <Button
+        {/* <Button
           title="Add Person"
           onPress={() => navigation.navigate("AddPerson")}
-        />
+        /> */}
       </SafeAreaView>
     </SafeAreaProvider>
   );
