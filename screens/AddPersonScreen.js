@@ -45,12 +45,6 @@ export default function AddPersonScreen() {
     setMode(currentMode);
   };
 
-  // const handleDateChange = (event, selectedDate) => {
-  //   const currentDate = selectedDate || dob;
-  //   setShowPicker(false);
-  //   setDob(currentDate);
-  // };
-
   const savePerson = () => {
     if (name && dob) {
       const dobFormatted = format(dob, "yyyy-MM-dd");
@@ -94,8 +88,15 @@ export default function AddPersonScreen() {
         />
       )}
 
-      <Button title="Save" onPress={savePerson} />
-      <Button title="Cancel" onPress={() => navigation.goBack()} />
+      <TouchableOpacity style={styles.saveButton} onPress={savePerson}>
+        <Text style={styles.buttonText}>Save</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[styles.saveButton, styles.cancelButton]}
+        onPress={() => navigation.goBack()}
+      >
+        <Text style={styles.buttonText}>Cancel</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -104,7 +105,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    // justifyContent: "center",
   },
   heading: {
     fontSize: 20,
@@ -118,5 +118,22 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     paddingLeft: 10,
     borderRadius: 5,
+  },
+  saveButton: {
+    backgroundColor: "dodgerblue",
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    alignItems: "center",
+    marginBottom: 5,
+    marginTop: 20,
+  },
+  cancelButton: {
+    backgroundColor: "#f44336",
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });

@@ -36,7 +36,7 @@ export default function PeopleScreen() {
             text: "Delete",
             onPress: () => deletePerson(id),
           },
-        ],
+        ]
       );
     }
   };
@@ -50,38 +50,54 @@ export default function PeopleScreen() {
     </TouchableOpacity>
   );
 
+  const sortedPeople = [...people].sort(
+    (a, b) => new Date(a.dob) - new Date(b.dob)
+  );
+
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
         <Text style={styles.heading}>People List</Text>
-        {/* <Text style={styles.heading2}>No People Saved Yet</Text> */}
-        
-        <FlatList
-          // onPress={() => navigation.navigate("Idea")}
-          data={people}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View>
-              <Swipeable renderRightActions={() => renderRightActions(item.id)}>
-                <TouchableOpacity
-                  style={styles.personContainer}
-                  onPress={() =>
-                    navigation.navigate("IdeaScreen", { id: item.id })
-                  }
+        {people.length === 0 ? (
+          <View>
+            <Text style={styles.noPeopleText}>No people added yet</Text>
+          </View>
+        ) : (
+          <FlatList
+            // onPress={() => navigation.navigate("Idea")}
+            data={sortedPeople}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <View>
+                <Swipeable
+                  renderRightActions={() => renderRightActions(item.id)}
                 >
-                  <View style={styles.textContainer}>
-                    <Text style={styles.name}>{item.name}</Text>
-                    <Text style={styles.dob}>{item.dob}</Text>
-                  </View>
-                  <Image
-                    source={require("../assets/bulb.png")}
-                    style={styles.itemImage}
-                  />
-                </TouchableOpacity>
-              </Swipeable>
-            </View>
-          )}
-        />
+                  <TouchableOpacity
+                    style={styles.personContainer}
+                    onPress={() =>
+                      navigation.navigate("IdeaScreen", { id: item.id })
+                    }
+                  >
+                    <View style={styles.textContainer}>
+                      <Text style={styles.name}>{item.name}</Text>
+                      <Text style={styles.dob}>
+                        {new Date(item.dob).toLocaleDateString(undefined, {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
+                      </Text>
+                    </View>
+                    <Image
+                      source={require("../assets/bulb.png")}
+                      style={styles.itemImage}
+                    />
+                  </TouchableOpacity>
+                </Swipeable>
+              </View>
+            )}
+          />
+        )}
         <Button
           title="Add Person"
           onPress={() => navigation.navigate("AddPerson")}
@@ -159,5 +175,11 @@ const styles = StyleSheet.create({
   deleteText: {
     color: "white",
     fontWeight: "bold",
+  },
+  noPeopleText: {
+    fontSize: 18,
+    textAlign: "center",
+    color: "#666",
+    marginBottom: 50,
   },
 });

@@ -1,5 +1,5 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import {
   Button,
   FlatList,
@@ -11,6 +11,7 @@ import {
   Image,
   Alert,
   TextInput,
+  Modal,
 } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import PeopleContext from "../PeopleContext";
@@ -22,6 +23,9 @@ export default function IdeaScreen() {
   const personId = route.params?.id;
 
   const person = people.find((p) => p.id === personId);
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   if (!person) {
     return (
@@ -58,18 +62,27 @@ export default function IdeaScreen() {
     ]);
   };
 
+  const openModal = (imageUri) => {
+    setSelectedImage(imageUri);
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+    setSelectedImage(null);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.name}>Ideas for {person.name}</Text>
 
-      {/* <Button
-        title="Add Idea"
-        onPress={() => navigation.navigate("AddIdea", { personId: person.id })}
-      /> */}
-
       {ideas.length === 0 ? (
         <View>
-          <TextInput placeholder="No Ideas Added Yet" style={styles.input} editable={false}/>
+          <TextInput
+            placeholder="No Ideas Added Yet"
+            style={styles.input}
+            editable={false}
+          />
         </View>
       ) : (
         <FlatList
@@ -77,7 +90,9 @@ export default function IdeaScreen() {
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <View style={styles.ideaContainer}>
-              <Image source={{ uri: item.img }} style={styles.ideaImage} />
+              <TouchableOpacity onPress={() => openModal(item.img)}>
+                <Image source={{ uri: item.img }} style={styles.ideaImage} />
+              </TouchableOpacity>
               <View style={styles.textContainer}>
                 <Text style={styles.ideaText}>{item.text}</Text>
                 <TouchableOpacity
@@ -96,6 +111,25 @@ export default function IdeaScreen() {
         title="Add Idea"
         onPress={() => navigation.navigate("AddIdea", { personId })}
       />
+
+      {/* Modal to preview image */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={closeModal}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Image
+              source={{ uri: selectedImage }}
+              style={styles.fullImage}
+              resizeMode="contain"
+            />
+            <Button title="Close" onPress={closeModal} />
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -156,5 +190,24 @@ const styles = StyleSheet.create({
   deleteText: {
     color: "white",
     fontWeight: "bold",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.8)",
+  },
+  modalContent: {
+    width: "90%",
+    height: "80%",
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 20,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  fullImage: {
+    width: "100%",
+    height: "80%",
   },
 });

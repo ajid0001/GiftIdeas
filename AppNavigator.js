@@ -12,10 +12,62 @@ export default function AppNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="People" component={PeopleScreen} />
-        <Stack.Screen name="AddPerson" component={AddPersonScreen} />
-        <Stack.Screen name="IdeaScreen" component={IdeaScreen} />
-        <Stack.Screen name="AddIdea" component={AddIdeaScreen} />
+        <Stack.Screen
+          name="People"
+          component={PeopleScreen}
+          options={{
+            title: "People List",
+            headerStyle: {
+              backgroundColor: "dodgerblue",
+            },
+            headerTintColor: "white",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="AddPerson"
+          component={AddPersonScreen}
+          options={{
+            title: "Add People",
+            headerStyle: {
+              backgroundColor: "dodgerblue",
+            },
+            headerTintColor: "white",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="IdeaScreen"
+          component={IdeaScreen}
+          options={{
+            title: "Idea List",
+            headerStyle: {
+              backgroundColor: "dodgerblue",
+            },
+            headerTintColor: "white",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="AddIdea"
+          component={AddIdeaScreen}
+          options={{
+            title: "Add Idea",
+            headerStyle: {
+              backgroundColor: "dodgerblue",
+            },
+            headerTintColor: "white",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
