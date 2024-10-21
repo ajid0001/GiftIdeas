@@ -60,6 +60,7 @@ export default function AddIdeaScreen() {
       text: ideaText,
       // img: ideaImage || "https://via.placeholder.com/50",
       img: photo,
+      dimensions: imageDimensions,
     };
 
     const updatedPeople = people.map((p) =>
@@ -79,11 +80,6 @@ export default function AddIdeaScreen() {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
       setHasPermission(status === "granted");
-
-      const availableSizes =
-        await cameraRef.current.getAvailablePictureSizesAsync(
-          Camera.Constants.Type.back
-        );
     })();
   }, []);
 
